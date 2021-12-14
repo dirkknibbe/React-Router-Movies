@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom'
+
+
 
 export default function Movie(props) {
-  const [movie, setMovie] = useState();
+  const [movie, setMovie] = useState([]);
+  
+  const { id } = useParams();
+  
 
-  let id = 1;
+
+  // let id = props.id;
   // Change ^^^ that line and use a hook to obtain the :id parameter from the URL
 
   useEffect(() => {
@@ -13,13 +20,15 @@ export default function Movie(props) {
       .then(response => {
         // Study this response with a breakpoint or log statements
         // and set the response data as the 'movie' slice of state
+        console.log(response)
+        setMovie(response.data)
       })
       .catch(error => {
         console.error(error);
       });
     // This effect should run every time time
     // the `id` changes... How could we do this?
-  }, []);
+  }, [id]);
 
   // Uncomment this only when you have moved on to the stretch goals
   // const saveMovie = evt => { }
@@ -31,6 +40,7 @@ export default function Movie(props) {
   const { title, director, metascore, stars } = movie;
 
   return (
+    
     <div className="save-wrapper">
       <div className="movie-card">
         <h2>{title}</h2>
@@ -42,7 +52,7 @@ export default function Movie(props) {
         </div>
         <h3>Actors</h3>
 
-        {stars.map(star => (
+        {stars?.map(star => (
           <div key={star} className="movie-star">
             {star}
           </div>
@@ -50,5 +60,6 @@ export default function Movie(props) {
       </div>
       <div className="save-button">Save</div>
     </div>
+    
   );
 }
